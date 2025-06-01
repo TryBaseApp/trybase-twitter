@@ -1,0 +1,37 @@
+{
+  "name": "crud-api",
+  "version": "1.0.0",
+  "description": "Prisma CRUD API using Hono",
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "bunx prisma migrate deploy && bun dist/app.js",
+    "dev": "bunx prisma migrate dev && bun --watch app.ts",
+    "migrate:dev": "bunx prisma migrate dev",
+    "migrate:deploy": "bunx prisma migrate deploy",
+    "migrate:reset": "bunx prisma migrate reset",
+    "migrate:status": "bunx prisma migrate status",
+    "deploy": "bun run build && bun run migrate:deploy && bun run start"
+  },
+  "keywords": [
+    "hono",
+    "prisma",
+    "api",
+    "crud",
+    "rest"
+  ],
+  "dependencies": {
+    "@hono/zod-validator": "^0.5.0",
+    "@prisma/client": "^6.8.2",
+    "hono": "^4.7.9",
+    "prisma": "^6.8.2",
+    "zod": "^3.24.4"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.13",
+    "typescript": "^5.8.3"
+  },
+  "prisma": {
+    "schema": "prisma/schema.prisma"
+  }
+}
