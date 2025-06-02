@@ -120,6 +120,7 @@ bun run dev
 ├── api/            # API route handlers
 ├── prisma/         # Database schema and migrations
 ├── app.ts          # Main application entry point
+├── Dockerfile      # The dockerfile
 ├── package.json    # Project dependencies and scripts
 └── tsconfig.json   # TypeScript configuration
 ```

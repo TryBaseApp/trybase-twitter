@@ -10,63 +10,63 @@ generator client {
 }
 
 model Users {
-  id                        BigInt      @id @default(autoincrement())
-  username                  String      @unique
-  email                     String      @unique
-  passwordHash              String      @map("password_hash")
-  createdAt                 DateTime    @default(now()) @map("created_at") @db.Timestamp(6)
-  posts                     Posts[]
-  likes                     Likes[]
-  comments                  Comments[]
-  followers                 Followers[]
-  followers_ViaFK_followers Followers[]
+  id                      BigInt      @id @default(autoincrement())
+  username                String      @unique
+  email                   String      @unique
+  passwordHash            String      @map("password_hash")
+  createdAt               DateTime    @default(now()) @map("created_at") @db.Timestamp(6)
+  posts                   Posts[]
+  likes                   Likes[]
+  comments                Comments[]
+  followersViaFollowerIds Followers[] @relation(name: "Followers_followerId_To_Users")
+  followersViaFolloweeIds Followers[] @relation(name: "Followers_followeeId_To_Users")
 
   @@map("users")
 }
 
 model Posts {
-  id        BigInt     @id @default(autoincrement())
-  userId    BigInt     @map("user_id")
-  content   String
-  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamp(6)
-  users     Users      @relation(fields: [userId], references: [id])
-  likes     Likes[]
-  comments  Comments[]
+  id              BigInt     @id @default(autoincrement())
+  userId          BigInt     @map("user_id")
+  content         String
+  createdAt       DateTime   @default(now()) @map("created_at") @db.Timestamp(6)
+  userId_Relation Users      @relation(fields: [userId], references: [id])
+  likes           Likes[]
+  comments        Comments[]
 
   @@map("posts")
 }
 
 model Likes {
-  id        BigInt   @id @default(autoincrement())
-  userId    BigInt   @map("user_id")
-  postId    BigInt   @map("post_id")
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
-  users     Users    @relation(fields: [userId], references: [id])
-  posts     Posts    @relation(fields: [postId], references: [id])
+  id              BigInt   @id @default(autoincrement())
+  userId          BigInt   @map("user_id")
+  postId          BigInt   @map("post_id")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  userId_Relation Users    @relation(fields: [userId], references: [id])
+  postId_Relation Posts    @relation(fields: [postId], references: [id])
 
   @@unique([userId, postId])
   @@map("likes")
 }
 
 model Comments {
-  id        BigInt   @id @default(autoincrement())
-  userId    BigInt   @map("user_id")
-  postId    BigInt   @map("post_id")
-  content   String
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
-  users     Users    @relation(fields: [userId], references: [id])
-  posts     Posts    @relation(fields: [postId], references: [id])
+  id              BigInt   @id @default(autoincrement())
+  userId          BigInt   @map("user_id")
+  postId          BigInt   @map("post_id")
+  content         String
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  userId_Relation Users    @relation(fields: [userId], references: [id])
+  postId_Relation Posts    @relation(fields: [postId], references: [id])
 
   @@map("comments")
 }
 
 model Followers {
-  id             BigInt   @id @default(autoincrement())
-  followerId     BigInt   @map("follower_id")
-  followeeId     BigInt   @map("followee_id")
-  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamp(6)
-  users          Users    @relation(fields: [followerId], references: [id])
-  users_Relation Users    @relation(fields: [followeeId], references: [id])
+  id                  BigInt   @id @default(autoincrement())
+  followerId          BigInt   @map("follower_id")
+  followeeId          BigInt   @map("followee_id")
+  createdAt           DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  followerId_Relation Users    @relation(name: "Followers_followerId_To_Users", fields: [followerId], references: [id])
+  followeeId_Relation Users    @relation(name: "Followers_followeeId_To_Users", fields: [followeeId], references: [id])
 
   @@unique([followerId, followeeId])
   @@map("followers")
